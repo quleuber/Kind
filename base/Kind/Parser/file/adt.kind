@@ -12,17 +12,21 @@ Kind.Parser.file.adt(file: String, code: String, defs: Kind.Defs): Parser(Kind.D
         let arit = Nat.add(List.length!(adt.pars), List.length!(adt.inds));
         // TODO check constructor names too
         get u = Kind.Parser.file.top_name(adt.name, defs)
-        let defs = Kind.Map.def(file, code, orig, adt.name, term, type, false, arit, false, defs);
-        let defs = List.fold!(adt.ctrs)!(defs, (ctr, defs)
+        let defs = Parser {
+          return Kind.Map.def(file, code, orig, adt.name, term, type, false, arit, false, defs);
+        }
+        let defs = List.fold!(adt.ctrs)!(defs, (ctr, defs) Parser {
+          get defs = defs
           let typ_name = adt.name;
           let ctr_arit = Nat.add(arit, List.length!(case ctr { new: ctr.args }));
           let ctr_name = String.flatten([typ_name, Kind.Name.read("."), case ctr { new: ctr.name }]);
+          get u = Kind.Parser.file.top_name(ctr_name, defs)
           let ctr_term = Kind.Constructor.build_term(adt, ctr);
           let ctr_term = Kind.Term.bind([], (x) Bits.i(x), ctr_term);
           let ctr_type = Kind.Constructor.build_type(adt, ctr);
           let ctr_type = Kind.Term.bind([], (x) Bits.o(x), ctr_type);
-          Kind.Map.def(file, code, orig, ctr_name, ctr_term, ctr_type, true, ctr_arit, false, defs));
-        return defs;
+          return Kind.Map.def(file, code, orig, ctr_name, ctr_term, ctr_type, true, ctr_arit, false, defs)});
+        defs;
       }
     };
   }
