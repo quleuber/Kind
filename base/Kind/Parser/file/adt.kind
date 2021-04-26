@@ -10,6 +10,8 @@ Kind.Parser.file.adt(file: String, code: String, defs: Kind.Defs): Parser(Kind.D
         let type = Kind.Datatype.build_type(adt);
         let type = Kind.Term.bind([], (x) Bits.o(x), type);
         let arit = Nat.add(List.length!(adt.pars), List.length!(adt.inds));
+        // TODO check constructor names too
+        get u = Kind.Parser.file.top_name(adt.name, defs)
         let defs = Kind.Map.def(file, code, orig, adt.name, term, type, false, arit, false, defs);
         let defs = List.fold!(adt.ctrs)!(defs, (ctr, defs)
           let typ_name = adt.name;

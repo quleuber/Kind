@@ -2,7 +2,7 @@ Kind.Parser.file.def(file: String, code: String, defs: Kind.Defs): Parser(Kind.D
   Parser {
     get init = Kind.Parser.init
     get name = Kind.Parser.name1
-    get name = Kind.Parser.file.top_name(name, defs)
+    get u = Kind.Parser.file.top_name(name, defs)
     get args = Parser.many!(Kind.Parser.binder(":"))
     let args = List.flatten!(args)
     Kind.Parser.text(":")

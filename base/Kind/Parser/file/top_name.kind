@@ -1,13 +1,13 @@
-Kind.Parser.file.top_name(name: Kind.Name, defs: Kind.Defs): Parser(Kind.Name)
+Kind.Parser.file.top_name(name: Kind.Name, defs: Kind.Defs): Parser(Unit)
   (idx, code)
     p_name = Kind.Parser.name1(idx, code)
     case p_name {
-      error: p_name
+      error: Parser.Reply.value!(idx, code, unit)
       value:
         case Kind.Map.get<Kind.Def>(p_name.val, defs) as got {
-          none: p_name
+          none: Parser.Reply.value!(idx, code, unit)
           some:
             // TODO better error message
-            Parser.Reply.error<Kind.Name>(idx, code, "top-level redefinition")
+            Parser.Reply.error!(idx, code, "top-level redefinition")
         }
     }

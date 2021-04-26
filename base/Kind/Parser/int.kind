@@ -6,8 +6,6 @@ Kind.Parser.int: Parser(Kind.Term)
       Kind.Parser.int_pos,
       Kind.Parser.int_neg,
     ])
-    // #TODO removing let causes weird errors
-    // as of kind 1.0.28
     let term = case sgn_num {
       new:
         ret = Kind.Term.ref("Int.from_nat")
