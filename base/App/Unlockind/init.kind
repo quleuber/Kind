@@ -1,0 +1,5 @@
+App.Unlockind.init : App.Init<App.Unlockind.State>
+    App.Store.new!(
+      App.Unlockind.State.local.new([]), 
+      App.Unlockind.State.global.new
+    )

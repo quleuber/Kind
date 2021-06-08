@@ -1,0 +1,11 @@
+App.Unlockind.when: App.When<App.Unlockind.State>
+  (event, state)
+   case event {
+       init :
+       log("jogo começou")
+       App.pass!
+     mouse_up :
+        App.pass!
+      frame : 
+        App.pass!
+   } default App.pass!

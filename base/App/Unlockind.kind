@@ -1,0 +1,8 @@
+App.Unlockind: App<App.Unlockind.State>
+  let init = App.Unlockind.init 
+  let draw = App.Unlockind.draw
+  let when = App.Unlockind.when
+  let tick = App.Unlockind.tick
+  let post = App.Unlockind.post
+  App.new!(init, draw, when, tick, post)
+  

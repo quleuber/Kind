@@ -1,0 +1,3 @@
+App.Unlockind.tick: App.Tick<App.Unlockind.State>
+  (tick, glob)
+    glob

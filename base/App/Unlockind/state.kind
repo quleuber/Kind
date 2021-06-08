@@ -1,0 +1,10 @@
+type App.Unlockind.State.global {
+   new
+}
+
+type App.Unlockind.State.local {
+  new(password: List<Nat>)
+}
+
+App.Unlockind.State: App.State
+  App.State.new(App.Unlockind.State.local, App.Unlockind.State.global)
