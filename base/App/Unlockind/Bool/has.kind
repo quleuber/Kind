@@ -1,0 +1,10 @@
+// Verifica se o número está contido na senha
+App.Unlockind.Bool.has(
+  num: Nat,
+  senha: List<Nat>
+): Bool
+
+  tmp = List.map!!(Nat.eql(num), senha)
+  tmp = List.fold!(tmp,_,false ,Bool.or)
+  tmp
+

@@ -1,0 +1,11 @@
+// Gera uma lista aleatória de números aleatórios cujo a seed é a hora
+App.Unlockind.Passwords.list(
+  len: Nat,
+  max: Nat
+): IO<List<Nat>>
+
+  IO { 
+    get seed = IO.get_time
+    return App.Unlockind.Passwords.generate(len, seed, max)
+  }
+

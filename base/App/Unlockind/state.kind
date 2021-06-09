@@ -3,7 +3,7 @@ type App.Unlockind.State.global {
 }
 
 type App.Unlockind.State.local {
-  new(password: List<Nat>)
+  new(game: App.Unlockind.stage)
 }
 
 App.Unlockind.State: App.State

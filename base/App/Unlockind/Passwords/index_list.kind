@@ -1,0 +1,19 @@
+// Gera uma lista random baseada no index de outras listas
+App.Unlockind.Passwords.index_list(
+  xs: List<Nat>,
+  ys: List<Nat>,
+  zs: List<Nat>
+): List<Nat>
+
+  case xs { 
+    nil: zs
+    cons: case ys { 
+      nil: []
+      cons: 
+      let a = List.pop_at!(xs.head, ys) open a 
+       case a.fst {
+        none: App.Unlockind.Passwords.index_list(List.cons!(Nat.mod(Nat.random(xs.head), 10),xs.tail),ys,zs)
+        some: App.Unlockind.Passwords.index_list(xs.tail, a.snd, List.cons!(a.fst.value, zs))
+      }
+    }
+  }

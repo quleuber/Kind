@@ -1,0 +1,18 @@
+// Verifica se o número está contido na senha e retorna um valor em string do
+// resultado
+App.Unlockind.String.verify(
+  senha: List<Nat>,
+  a: Nat,
+  b: Nat
+): String
+
+  case senha { 
+    nil:""
+    cons:
+      if Nat.eql(a,b) then
+        "V "
+      else if App.Unlockind.Bool.has(b, senha) then
+        "O "
+      else 
+        "X "
+  }

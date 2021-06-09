@@ -1,0 +1,6 @@
+// Converte o input do usuário em uma lista de Nat
+App.Unlockind.Passwords.read(
+  line: List<String>
+): List<Nat>
+
+  List.map!!(Nat.read, line)

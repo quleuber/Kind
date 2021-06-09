@@ -1,11 +1,46 @@
 App.Unlockind.when: App.When<App.Unlockind.State>
   (event, state)
-   case event {
-       init :
-       log("jogo começou")
-       App.pass!
-     mouse_up :
-        App.pass!
-      frame : 
-        App.pass!
-   } default App.pass!
+  open state
+  game = state.local@game
+  case game { 
+    select:
+      case event {
+        mouse_click:
+          difficulty = 
+          switch String.eql(event.id) {
+            "easy": App.Unlockind.difficulty.easy
+            "medium": App.Unlockind.difficulty.medium
+            "hard": App.Unlockind.difficulty.hard
+          } default App.Unlockind.difficulty.easy
+          
+          open state
+          IO { 
+            get passwords = App.Unlockind.Passwords.passcode
+            let user_input = ["","","",""]
+            let stage = App.Unlockind.play.new(passwords, user_input, difficulty)
+            let stage = App.Unlockind.stage.lobby(stage)
+            let new_state = state.local@game <- stage
+            App.set_local!(new_state)
+          }
+      } default App.pass!
+    lobby:
+      setter = App.Unlockind.When.set(game.play)
+      case event { 
+        input:
+            switch String.eql(event.id) { 
+              "num_1" : App.set_local!(state.local@game <- App.Unlockind.stage.lobby(setter(event.text, 0)))
+              "num_2" :App.set_local!(state.local@game <- App.Unlockind.stage.lobby(setter(event.text, 1)))
+              "num_3" :App.set_local!(state.local@game <- App.Unlockind.stage.lobby(setter(event.text, 2)))
+              "num_4" :App.set_local!(state.local@game <- App.Unlockind.stage.lobby(setter(event.text, 3)))
+          } default App.Pass!
+        mouse_click:
+          result = App.Unlockind.Passwords.read(game.play@input)
+          result = App.Unlockind.String.answer(game.play@password, result, game.play@password)
+          switch String.eql(event.id) {
+            "submit" : App.print!(List.show!(String.show, result))
+              } default App.Pass!
+      } default App.Pass!
+        
+}
+
+

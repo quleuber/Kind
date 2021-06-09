@@ -1,0 +1,15 @@
+// Gera uma lista aleatória de números aleatórios
+App.Unlockind.Passwords.generate(
+  len: Nat,
+  seed: Nat,
+  max: Nat
+): List<Nat>
+
+  case len { 
+    zero:
+      []
+    succ:
+      new_seed = Nat.random(seed)
+      (new_seed % max) & App.Unlockind.Passwords.generate(len.pred, new_seed, max)
+    }
+

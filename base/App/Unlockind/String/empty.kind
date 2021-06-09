@@ -1,0 +1,7 @@
+//Caso o usuário der um input, retornar uma string vazia
+App.Unlockind.String.empty(
+  xs: List<String>
+  idx: Nat
+): String
+
+  xs[idx] <> ""

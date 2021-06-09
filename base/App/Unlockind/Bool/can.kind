@@ -1,0 +1,12 @@
+// Verifica o input do usuário para saber se todos os números são válidos
+App.Unlockind.Bool.can(
+  xs: List<Nat>
+): Bool
+
+  chck = List.map!!(Nat.gtn(10), xs)
+  chck = List.fold!(chck,_, true, Bool.and)
+  chck
+
+
+
+

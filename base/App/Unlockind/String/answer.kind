@@ -1,0 +1,19 @@
+// Verifica as posições dos valores na senha e retorna uma lista de Strings
+App.Unlockind.String.answer(
+  suporte: List<Nat>,
+  senha: List<Nat>,
+  tentativa: List<Nat>
+): List<String>
+
+  case tentativa { 
+    nil: 
+      []
+    cons: 
+      case senha { 
+        nil: 
+          []
+        cons: 
+          List.cons!(App.Unlockind.String.verify(suporte, tentativa.head,senha.head), App.Unlockind.String.answer(suporte, senha.tail, tentativa.tail))
+    }!
+  }
+
