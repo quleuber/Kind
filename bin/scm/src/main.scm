@@ -1,11 +1,10 @@
 #!/usr/bin/env scheme-script
 (import (kind)
-        (utils)
         (chezscheme))
 (let ([args (cdr (command-line))])
   (if (null? args)
     (print-lines
-    '("# Kind - Scheme Release"
+    '("# kind-scm 1.0.59"
       ""
       "Usage:"
       ""

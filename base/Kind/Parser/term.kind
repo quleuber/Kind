@@ -1,6 +1,7 @@
 Kind.Parser.term: Parser(Kind.Term)
   Kind.Parser.block("term", Parser {
     get term = Parser.first_of!([
+      Kind.Parser.dom
       Kind.Parser.forall
       Kind.Parser.lambda
       Kind.Parser.lambda.erased
