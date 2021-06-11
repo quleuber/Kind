@@ -1,0 +1,2 @@
+Image.from_list(xs: List<Pair<Pos32, Col32>>): Image
+  U32Map.from_list<Col32>(xs)

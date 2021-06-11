@@ -1,0 +1,5 @@
+Image.to_voxbox(img: Image, vbox: VoxBox): VoxBox
+  list = Image.to_list(img)
+  for pixel in list with vbox:
+    VoxBox.push(pixel@fst, pixel@snd, vbox)
+  vbox

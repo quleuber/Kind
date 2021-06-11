@@ -5,11 +5,8 @@ App.Drawing.draw.commands(cmds:List<App.Drawing.Commands>, img:VoxBox): VoxBox
       pencil:
         App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
       square:
-        let img = App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y0, cmd.z, cmd.size, cmd.col, img)
-        let img = App.Drawing.draw.line(cmd.x1, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
-        let img = App.Drawing.draw.line(cmd.x1, cmd.y1, cmd.x0 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
-        let img = App.Drawing.draw.line(cmd.x0, cmd.y1, cmd.x0 ,cmd.y0, cmd.z, cmd.size, cmd.col, img)
-        img
+        let img = App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
+      img
     }default img  
     img
   

@@ -1,0 +1,2 @@
+Image.push(pos: Pos32, col: Col32, img: Image): Image
+  U32Map.set<Col32>(pos, col, img)

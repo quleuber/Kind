@@ -1,0 +1,2 @@
+Image.new: Image
+  U32Map.new<Col32>

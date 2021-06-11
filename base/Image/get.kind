@@ -1,0 +1,2 @@
+Image.get(pos: Pos32, img: Image): Maybe<Col32>
+  U32Map.get<Col32>(pos, img)
