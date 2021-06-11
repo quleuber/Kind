@@ -1,0 +1,13 @@
+JSON.show(json: JSON): String
+  JSON.show.go(json, 1)
+
+JSON.show.go(json: JSON, nivel: Nat): String
+  let result = case json {
+    null   : "null"
+    bool   : Bool.show(json.x)
+    number : F64.show(json.x)
+    string : String.show(json.x)
+    array  : "[\n" | List.fold!(json.x)!("", (x, y) String.concat(JSON.show.go(x, nivel + 1) | ", \n", y)) | "]"
+    object : "{\n" | List.fold!(json.x)!("", (x, y) String.concat(String.repeat(" ", nivel * 2) | x@fst | ": " | JSON.show.go(x@snd, nivel + 1) | ", \n", y)) | String.repeat(" ", (nivel - 1) * 2) | "}"
+  }
+  result

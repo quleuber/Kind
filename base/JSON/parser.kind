@@ -1,0 +1,97 @@
+JSON.parser: Parser<JSON>
+  Parser {
+    get term = Parser.first_of!([
+      JSON.parser.array
+      JSON.parser.object
+    ])
+
+    return term
+  }
+
+JSON.parser.object: Parser<JSON>
+  Parser {
+    get term   = Kind.Parser.items!("{", JSON.parser.obj_value, "}")
+    let result = JSON.object(term)
+    return result
+  }
+
+JSON.parser.array: Parser<JSON>
+  Parser {
+    get term   = Kind.Parser.items!("[", JSON.parser.value, "]")
+    let result = JSON.array(term)
+    return result
+  }
+
+JSON.parser.value: Parser<JSON>
+  Parser {
+    get result = Parser.first_of!([
+      JSON.parser.number,
+      JSON.parser.string,
+      JSON.parser.bool,
+      JSON.parser.null
+      JSON.parser.array,
+      JSON.parser.object,
+    ])
+
+    return result
+  }
+
+JSON.parser.number: Parser(JSON)
+  Parser {
+    get sign = Parser.maybe<Char>(Kind.Parser.float.sign)
+    let sign = sign <> '+'
+    get digits = Parser.many1<Char>(Kind.Parser.float.str_digit)
+    Parser.text(".")
+    get frac = Parser.many1<Char>(Kind.Parser.float.str_digit)
+    Parser.text("#64")
+    let float_str = String.cons(sign, String.from_list(digits))
+                                  | "."
+                                  | String.from_list(frac)
+    let conv = F64.parse(float_str)
+    return JSON.number(conv)
+  }
+
+JSON.parser.bool: Parser<JSON>
+  Parser {
+    get bool = Parser.first_of<Bool>([
+      Parser {
+        Parser.text("true")
+        return Bool.true
+      },
+      Parser {
+        Parser.text("false")
+        return Bool.false
+      }
+    ])
+    
+    return JSON.bool(bool)
+  }
+
+JSON.parser.null: Parser<JSON>
+  Parser {
+    Parser.first_of!([
+      Parser.text("null"),
+      Parser.text("undefined")
+    ])
+
+    let result = JSON.null
+    return result
+  }
+
+
+JSON.parser.obj_value: Parser<Pair<String, JSON>>
+  Parser {
+    Parser {
+      get key = Parser.string('"')
+      Parser.text(":")
+      Parser.spaces
+      get value = JSON.parser.value
+      return Pair.new!!(key, value)
+    }  
+  }
+
+JSON.parser.string: Parser<JSON>
+  Parser {
+    get result = Parser.string('"')
+    return JSON.string(result)
+  }

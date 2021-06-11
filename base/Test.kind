@@ -1,10 +1,6 @@
 Test: _
-  let a = U32Map.new!
-  let a = U32Map.set!(0, "asd0", a)
-  let a = U32Map.set!(1, "asd1", a)
-  let a = U32Map.set!(2, "asd2", a)
-  let a = U32Map.set!(4, "asd4", a)
-  let a = U32Map.del!(4, a)
-  let value = U32Map.get!(4, a) <> "nao achou"
-  // List.show!(Pair.show!!(U32.show, String.show), U32Map.to_list!(a))
-  value
+  let a = JSON.parser(Parser.State.new(none, "", 0, 0, "{
+    \"value\": true,
+    \"another value\": {\"rapaz\": [ 0.0, 1]}
+  }"))
+  a
