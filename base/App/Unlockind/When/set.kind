@@ -9,11 +9,7 @@ App.Unlockind.When.set(
   input = String.last(input)
   input = Char.to_string(input <> 0)
   if List.any!(String.eql(input), list) then
-    log(List.show!(String.show, lobby.input[idx] <- input))
-    new_input =  lobby.input[idx] <- input
+    new_input = lobby.input[idx] <- input
     lobby@input <- new_input
   else
     lobby
-
-
-

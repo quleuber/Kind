@@ -1,0 +1,5 @@
+App.Unlockind.When.dec_tries(
+  play: App.Unlockind.play
+): App.Unlockind.play
+
+  play@tries <- play@tries -1

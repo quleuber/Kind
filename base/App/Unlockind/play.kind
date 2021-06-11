@@ -1,3 +1,8 @@
 type App.Unlockind.play { 
-  new(password: List<Nat>, input: List<String>,  difficulty: App.Unlockind.difficulty)
+  new(
+    password: List<Nat>,
+    input: List<String>,
+    history: List<List<String>>,
+    tries: Nat,
+    difficulty: App.Unlockind.difficulty)
 }

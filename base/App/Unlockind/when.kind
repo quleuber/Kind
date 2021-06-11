@@ -8,16 +8,18 @@ App.Unlockind.when: App.When<App.Unlockind.State>
         mouse_click:
           difficulty = 
           switch String.eql(event.id) {
-            "easy": App.Unlockind.difficulty.easy
-            "medium": App.Unlockind.difficulty.medium
-            "hard": App.Unlockind.difficulty.hard
-          } default App.Unlockind.difficulty.easy
+            "play": App.Unlockind.difficulty.play
+            //TODO Add Difficulties
+            //"easy": App.Unlockind.difficulty.easy
+            //"medium": App.Unlockind.difficulty.medium
+            //"hard": App.Unlockind.difficulty.hard
+          } default App.Unlockind.difficulty.play
           
           open state
           IO { 
             get passwords = App.Unlockind.Passwords.passcode
             let user_input = ["","","",""]
-            let stage = App.Unlockind.play.new(passwords, user_input, difficulty)
+            let stage = App.Unlockind.play.new(passwords,user_input, [[]], 4, difficulty)
             let stage = App.Unlockind.stage.lobby(stage)
             let new_state = state.local@game <- stage
             App.set_local!(new_state)
@@ -34,11 +36,17 @@ App.Unlockind.when: App.When<App.Unlockind.State>
               "num_4" :App.set_local!(state.local@game <- App.Unlockind.stage.lobby(setter(event.text, 3)))
           } default App.Pass!
         mouse_click:
-          result = App.Unlockind.Passwords.read(game.play@input)
-          result = App.Unlockind.String.answer(game.play@password, result, game.play@password)
           switch String.eql(event.id) {
-            "submit" : App.print!(List.show!(String.show, result))
-              } default App.Pass!
+            "submit" :
+              IO {
+                let result = App.Unlockind.String.result(game.play)
+                let text = result@fst
+                let stage = result@snd
+                let state = state.local@game <- stage
+                App.print!(List.show!(String.show, text))
+                App.set_local!(state)
+              }
+          } default App.Pass!
       } default App.Pass!
         
 }

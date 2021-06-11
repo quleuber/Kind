@@ -1,5 +1,7 @@
 type App.Unlockind.difficulty { 
-  easy
-  medium
-  hard
+  play
+  //TODO Add difficulties
+  //easy
+  //medium
+  //hard
 }

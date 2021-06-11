@@ -1,0 +1,6 @@
+App.Unlockind.Bool.over(
+  answer: List<String>
+): Bool
+
+  win = ["V ","V ","V ","V "]
+  List.eql!(String.eql, answer, win)

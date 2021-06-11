@@ -1,0 +1,6 @@
+App.Unlockind.Bool.empty(
+  input: List<String>
+): Bool
+
+  List.any!(String.is_empty, input)
+

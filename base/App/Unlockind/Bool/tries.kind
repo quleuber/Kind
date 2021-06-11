@@ -1,0 +1,5 @@
+App.Unlockind.Bool.tries(
+  tries: Nat
+): Bool
+  
+  Nat.gtn(tries, 0)

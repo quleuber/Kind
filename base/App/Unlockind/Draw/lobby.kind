@@ -2,31 +2,41 @@ App.Unlockind.Draw.lobby(
   state: App.Unlockind.play
 ): DOM
 
+//3 divs -> Esquerda // Meio // Direita
   open state
   input = App.Unlockind.String.empty(state@input)
-  DOM.node("div", 
-    {}, 
-    { "width": "100vw", 
+  test = some(2)
+
+  container_style = {
+      "width": "100vw", 
       "height": "80vh", 
       "display": "flex", 
       "flex-direction": "column", 
       "justify-content": "center", 
       "align-items": "center",
       "font-size": "2rem"
-    },
-    [
-      //DOM.node("h1", {}, {"margin-bottom": "10px"}, [DOM.text("Welcome to Unlockind")]),
-      DOM.node("div", {}, {}, [
-        DOM.node("input", {"id": "num_1", "value": input(0)}, {"width": "5vw", "height": "10vh" , "margin-left": "15px","font-size": "2rem", "font-family": "monospace", "outline": "transparent"}, [])
-        DOM.node("input", {"id": "num_2", "value": input(1)}, {"width": "5vw", "height": "10vh" , "margin-left": "15px","font-size": "2rem", "font-family": "monospace", "outline": "transparent"}, [])
-        DOM.node("input", {"id": "num_3", "value": input(2)}, {"width": "5vw", "height": "10vh" , "margin-left": "15px","font-size": "2rem", "font-family": "monospace", "outline": "transparent"}, [])
-        DOM.node("input", {"id": "num_4", "value": input(3)}, {"width": "5vw", "height": "10vh" , "margin-left": "15px","font-size": "2rem", "font-family": "monospace", "outline": "transparent"}, [])
-        DOM.node("button",{"id": "submit"}, {"font-size": "2rem", "font-family": "monospace", "margin-left": "15px","padding": "2px"}, [DOM.text("Submit")])
-        //DOM.node("button",{"id": "medium"}, {"font-size": "2rem", "font-family": "monospace", "margin-left": "15px","padding": "2px"}, [DOM.text("Aqui")])
-        //DOM.node("button",{"id": "hard"}, {"font-size": "2rem", "font-family": "monospace", "margin-left": "15px","padding": "2px"}, [DOM.text("Hard")])
-      
-      ]),
-    ]
-  )
+    }
+  input_style = {
+    "width": "5vw",
+    "height": "10vh",
+    "margin-left": "15px",
+    "font-size": "2rem",
+    "font-family": "monospace",
+    "outline": "transparent"
+    }
+  button_style = {
+  "font-size": "2rem",
+  "font-family": "monospace",
+  "margin-left": "15px",
+  "padding": "2px"
+  }
 
+  <div style=container_style>
+    <div>
+      for i in [1,2,3,4]: 
+        <input id="num_"|Nat.show(i) value=input(i-1) style=input_style> 
+        </input>
+      <button id="submit" style=button_style>"Submit"</button>
+    </div>
+  </div>
 

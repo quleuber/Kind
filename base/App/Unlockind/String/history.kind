@@ -1,0 +1,7 @@
+//Função que acumula os resultados anteriores pra mostrar em histórico
+App.Unlockind.String.history(
+  input: List<String>
+  history: List<List<String>>
+): List<List<String>>
+
+  input & history

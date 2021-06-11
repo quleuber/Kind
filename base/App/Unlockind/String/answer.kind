@@ -13,7 +13,9 @@ App.Unlockind.String.answer(
         nil: 
           []
         cons: 
-          List.cons!(App.Unlockind.String.verify(suporte, tentativa.head,senha.head), App.Unlockind.String.answer(suporte, senha.tail, tentativa.tail))
+          verify = App.Unlockind.String.verify(suporte, tentativa.head,senha.head)
+          answer =  App.Unlockind.String.answer(suporte, senha.tail, tentativa.tail)
+          verify & answer
     }!
   }
 
