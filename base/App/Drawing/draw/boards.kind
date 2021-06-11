@@ -1,5 +1,6 @@
 App.Drawing.draw.boards(img: VoxBox, state: App.Store<App.Drawing.State>): VoxBox
   local       = state@local
   whiteboard  = local@whiteboard
-  img         = VoxBox.clear(img) 
-  VoxBox.Draw.image(0, 0, 0, whiteboard@live, img)
+  img         = VoxBox.clear(img)
+  cmds        = whiteboard@past
+  List.fold!(cmds, _,img, App.Drawing.draw.commands)

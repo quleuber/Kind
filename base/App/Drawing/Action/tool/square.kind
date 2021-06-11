@@ -1,0 +1,22 @@
+App.Drawing.Action.tool.square(local: App.Drawing.State.local): App.Drawing.State.local
+log("push")
+style     = local@style
+size      = style@size
+wb        = local@whiteboard
+info      = local@env_info@mouse_pos
+color     = style@color
+{x, y}    = local@start_pos
+command   = 
+App.Drawing.Commands.new(
+    x, y
+    U32.to_i32(info@fst), U32.to_i32(info@snd)
+    10
+    size
+    color
+    App.Drawing.Tool.square)
+
+past_head = List.head!(wb@past) <> []
+past_head = [command]
+past      = past_head & List.tail!(wb@past)
+local@whiteboard <- App.Drawing.Whiteboard.new(past, [])
+

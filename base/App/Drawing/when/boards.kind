@@ -16,19 +16,48 @@ case event{
         App.set_local!(new_local)
       'Z': 
         App.set_local!(App.Drawing.Action.local.ctrl_z(local))
+      'Y':
+        App.set_local!(App.Drawing.Action.local.ctrl_y(local))
+      '0':
+        style = local@style
+        style = style@size <- style@size + 1
+        new_local = local@style <- style
+        App.set_local!(new_local)
+      '9':
+        style = local@style
+        style = 
+        if U32.gtn(style@size,2) then
+          style@size <- style@size - 1
+        else
+          style
+        new_local = local@style <- style
+        App.set_local!(new_local)
+      
     }default App.pass!
 
   mouse_down:
-    new_local = local@drawing <- true
+    whiteboard  = local@whiteboard
+    whiteboard  = whiteboard@past <- [] & whiteboard@past
+    new_local   = local@whiteboard <- whiteboard
+    {x,y}       = local@env_info@mouse_pos
+    new_local   = new_local@start_pos <- {U32.to_i32(x), U32.to_i32(y)}
+    new_local   = new_local@drawing <- true
     App.set_local!(new_local)
 
   frame:
+    log(Nat.show(List.length!(local@whiteboard@past)))
+    let new_local = local@env_info <- event.info
+    let {x, y}    = local@env_info@mouse_pos
+    let style     = local@style
+    let tool      = style@tool
     let new_local = 
       if local@drawing then
-        App.Drawing.draw.pencil(local)
+        case tool {
+          pencil: App.Drawing.Action.tool.pencil(new_local, U32.to_i32(x), U32.to_i32(y))
+          square: App.Drawing.Action.tool.square(new_local)
+        }
       else
-        local 
-    let new_local = local@env_info <- event.info
+        new_local 
     App.set_local!(new_local)    
 
   mouse_up:

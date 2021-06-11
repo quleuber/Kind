@@ -1,0 +1,11 @@
+type App.Drawing.Commands {
+  new(
+    x0: I32,
+    y0: I32,
+    x1: I32,
+    y1: I32,
+    z: I32,
+    size: U32,
+    col: Col32
+    tool: App.Drawing.Tool)
+}

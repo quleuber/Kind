@@ -1,13 +1,12 @@
-App.Drawing.Action.local.ctrl_z(local: App.Drawing.State.local): App.Drawing.State.local
+App.Drawing.Action.local.ctrl_y(local: App.Drawing.State.local): App.Drawing.State.local
   open local
   open local.whiteboard as wb
-  case wb.past {
+  case wb.future {
     nil: local
     cons:
-      head    = wb.past.head
-      future  = head & wb.future
-      past    = wb.past.tail
+      head    = wb.future.head
+      past  = head & wb.past
+      future    = wb.future.tail
       local@whiteboard <- App.Drawing.Whiteboard.new(past, future)
-
   }
   //<>  VoxBox.Draw.square(126, 126, 0, 20, 20, Col32.new(0#32,255#32,0#32,125#32), wb.live)

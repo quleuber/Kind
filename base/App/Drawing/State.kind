@@ -11,6 +11,7 @@ type App.Drawing.State.local {
     input: String
     user: String
     drawing: Bool
+    start_pos: Pair<I32, I32>
     style: App.Drawing.Style    
     whiteboard: App.Drawing.Whiteboard    
     env_info: App.EnvInfo

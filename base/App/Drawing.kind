@@ -1,6 +1,6 @@
 App.Drawing: App<App.Drawing.State>
-  let img  = VoxBox.alloc_capacity(U32.mul(65536#32, 8#32))
-  let init = App.Drawing.App.init(img)
+  let img  = VoxBox.alloc_capacity(U32.mul(655360#32, 8#32))
+  let init = App.Drawing.App.init
   let draw = App.Drawing.App.draw(img)
   let when = App.Drawing.App.when
   let tick = App.Drawing.App.tick
