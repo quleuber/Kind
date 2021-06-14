@@ -1,22 +1,26 @@
 JSON.show(json: JSON): String
-  JSON.show.go(json, 1)
+  JSON.show.go(json, 1, false)
 
-JSON.show.go(json: JSON, nivel: Nat): String
+JSON.show.go(json: JSON, nivel: Nat, from_obj: Bool): String
+  let spaces_1 = String.repeat(" ", nivel * 2)
+  let spaces_2 = String.repeat(" ", (nivel - 1) * 2)
+  let spaces_3 = if from_obj then "" else spaces_2
+
   let result = case json {
     null   : "null"
     bool   : Bool.show(json.x)
     number : F64.show(json.x)
     string : String.show(json.x)
     
-    array  : String.repeat(" ", (nivel - 1) * 2) | "[\n" | 
+    array  : spaces_3 | "[\n" | 
                 List.fold!(json.x)!("", (x, y) 
-                  String.concat(JSON.show.go(x, nivel + 1) | ", \n", y)) | 
-             String.repeat(" ", (nivel - 1) * 2) | "]"
+                  JSON.show.go(x, nivel + 1, false) | ", \n" | y) | 
+             spaces_2 | "]"
 
-    object : String.repeat(" ", (nivel - 1) * 2) | "{\n" | 
+    object : spaces_3 | "{\n" | 
                 List.fold!(json.x)!("", (x, y) 
                   String.concat(
-                    String.repeat(" ", nivel * 2) | x@fst | ": " | JSON.show.go(x@snd, nivel + 1) | ", \n", y)) | 
-              String.repeat(" ", (nivel - 1) * 2) | "}"
+                    spaces_1 | x@fst | ": " | JSON.show.go(x@snd, nivel + 1. true) | ", \n", y)) | 
+             spaces_2 | "}"
   }
   result
