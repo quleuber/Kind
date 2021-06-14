@@ -12,7 +12,8 @@ type App.Drawing.State.local {
     user: String
     drawing: Bool
     start_pos: Pair<I32, I32>
-    style: App.Drawing.Style    
+    style: App.Drawing.Style
+    canvas: Image
     whiteboard: App.Drawing.Whiteboard    
     env_info: App.EnvInfo
   )

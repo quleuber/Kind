@@ -1,0 +1,21 @@
+App.Drawing.Action.tool.circle(local: App.Drawing.State.local, x:I32, y:I32): App.Drawing.State.local
+log("push")
+style     = local@style
+size      = style@size
+wb        = local@whiteboard
+info      = local@env_info@mouse_pos
+color     = style@color
+command   = 
+App.Drawing.Commands.new(
+    x, y
+    U32.to_i32(info@fst), U32.to_i32(info@snd)
+    10
+    size
+    color
+    App.Drawing.Tool.circle)
+
+past_head = List.head!(wb@past) <> []
+past_head = command & past_head
+past      = past_head & List.tail!(wb@past)
+local@whiteboard <- App.Drawing.Whiteboard.new(past, [])
+

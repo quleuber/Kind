@@ -1,0 +1,56 @@
+// Implementing Mid-Point Circle Drawing Algorithm
+Image.circle(pos: Pos32, radius: U32, col: Col32, img: Image): Image
+    
+  x = 0    :: I32
+  y = U32.to_i32(radius)
+  x_center =  U32.to_i32(Pos32.get_x(pos))
+  y_center =  U32.to_i32(Pos32.get_y(pos))
+  z        =  Pos32.get_z(pos)
+  p        =  +1#32 - U32.to_i32(radius)
+
+  imgp  = {img, p}
+  xy    = {x, y}
+
+  while xy@fst <=? xy@snd with {imgp, xy}:
+    x   = xy@fst
+    y   = xy@snd
+    img = imgp@fst
+    p   = imgp@snd
+
+    new_point = Pos32.new(I32.to_u32(x_center + x), I32.to_u32(y_center + y), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center + y), I32.to_u32(y_center + x), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center - y), I32.to_u32(y_center + x), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center - x), I32.to_u32(y_center + y), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center - x), I32.to_u32(y_center - y), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center - y), I32.to_u32(y_center - x), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center + y), I32.to_u32(y_center - x), z)
+    img = Image.push(new_point, col, img)
+
+    new_point = Pos32.new(I32.to_u32(x_center + x), I32.to_u32(y_center - y), z)
+    img = Image.push(new_point, col, img)
+
+    let {p, y} = if p <? 0 
+    then
+      p = p + (2 * x) + 1
+      {p, y}
+    else
+      y = y - 1
+      p = p + (2 * x) - (2 * y) + 1  
+      {p, y}
+    
+    x = x + 1
+    {{img, p} {x, y}}
+  imgp@fst
+      

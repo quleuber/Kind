@@ -8,14 +8,15 @@ App.Drawing.App.init: App.Init<App.Drawing.State>
   input       = ""
   user        = ""
   env_info    = App.EnvInfo.new({256, 256}, {0, 0})
-  tool        = App.Drawing.Tool.square
+  tool        = App.Drawing.Tool.circle
   size        = 1 :: U32
   color       = Col32.new(255#32,0#32,0#32,125#32)
   whiteboard  = App.Drawing.Whiteboard.new([],[])
   style       = App.Drawing.Style.new(tool, size, color)
+  canvas      = Image.new
   
   
   App.Store.new!(
-    App.Drawing.State.local.new(input, user, false, {0, 0}, style, whiteboard, env_info)
+    App.Drawing.State.local.new(input, user, false, {0, 0}, style, canvas, whiteboard, env_info)
     App.Drawing.State.global.new(room, players, stage)
   )

@@ -3,4 +3,5 @@ App.Drawing.draw.boards(img: VoxBox, state: App.Store<App.Drawing.State>): VoxBo
   whiteboard  = local@whiteboard
   img         = VoxBox.clear(img)
   cmds        = whiteboard@past
-  List.fold!(cmds, _,img, App.Drawing.draw.commands)
+  img = List.fold!(cmds, _,img, App.Drawing.draw.commands)
+  img

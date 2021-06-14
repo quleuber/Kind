@@ -1,4 +1,4 @@
-App.Drawing.draw.circle(
+App.Drawing.draw.fill(
   x0: I32,
   y0: I32,
   x1: I32,
@@ -9,5 +9,5 @@ App.Drawing.draw.circle(
   img: Image
 ): Image
   pos = Pos32.new(I32.to_u32(x1), I32.to_u32(y1), I32.to_u32(z))
-  Image.circle_filled(pos, size, col, img)
+  Image.fill(pos, col, img)
 

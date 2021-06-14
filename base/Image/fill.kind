@@ -1,0 +1,23 @@
+Image.fill(pos: Pos32, col: Col32, img: Image): Image
+  pix = U32Map.get<Col32>(pos, img)
+  case pix {
+    none:
+      img = Image.push(pos, col, img)
+      Image.fill.aux(pos, col, img)
+
+    some:
+      if U32.eql(pix.value, col) then
+        img
+      else
+        Image.fill.aux(pos, col, img)
+  }
+
+Image.fill.aux(pos: Pos32, col: Col32, img: Image): Image
+  x = Pos32.get_x(pos)
+  y = Pos32.get_y(pos)
+  z = Pos32.get_z(pos)
+  img = Image.fill(Pos32.new(x + 1, y, z), col, img)
+  img = Image.fill(Pos32.new(x - 1, y, z), col, img)
+  img = Image.fill(Pos32.new(x, y + 1, z), col, img)
+  img = Image.fill(Pos32.new(x, y - 1, z), col, img)
+  img

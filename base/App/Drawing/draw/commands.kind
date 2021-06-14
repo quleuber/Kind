@@ -1,12 +1,18 @@
 App.Drawing.draw.commands(cmds:List<App.Drawing.Commands>, img:VoxBox): VoxBox
-  for cmd in cmds with img:
+  image = Image.new
+  for cmd in cmds with image:
     open cmd
     case cmd.tool {
       pencil:
-        App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
+        App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, image)
       square:
-        let img = App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
-      img
-    }default img  
-    img
+        //let img = App.Drawing.draw.line(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, img)
+        image
+      circle:
+        App.Drawing.draw.circle(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, image)
+      fill:
+        App.Drawing.draw.fill(cmd.x0, cmd.y0, cmd.x1 ,cmd.y1, cmd.z, cmd.size, cmd.col, image)
+    }default image
+  Image.to_voxbox(image, img)
+
   

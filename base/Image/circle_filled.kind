@@ -1,0 +1,48 @@
+// Implementing Mid-Point Circle Drawing Algorithm
+Image.circle_filled(pos: Pos32, radius: U32, col: Col32, img: Image): Image
+    
+  x = 0    :: I32
+  y = U32.to_i32(radius)
+  x_center =  U32.to_i32(Pos32.get_x(pos))
+  y_center =  U32.to_i32(Pos32.get_y(pos))
+  z        =  U32.to_i32(Pos32.get_z(pos))
+  p        =  +1#32 - U32.to_i32(radius)
+
+  imgp  = {img, p}
+  xy    = {x, y}
+
+  while xy@fst <=? xy@snd with {imgp, xy}:
+    x   = xy@fst
+    y   = xy@snd
+    img = imgp@fst
+    p   = imgp@snd
+
+    {top_x, top_y} = {x_center + x, y_center + y}
+    {bot_x, bot_y} = {x_center + x, y_center - y}
+    img = Image.line(top_x, top_y, bot_x, bot_y, z, col, img)
+  
+    {top_x, top_y} = {x_center + y, y_center + x}
+    {bot_x, bot_y} = {x_center + y, y_center - x}
+    img = Image.line(top_x, top_y, bot_x, bot_y, z, col, img)
+
+    {top_x, top_y} = {x_center - x, y_center + y}
+    {bot_x, bot_y} = {x_center - x, y_center - y}
+    img = Image.line(top_x, top_y, bot_x, bot_y, z, col, img)
+
+    {top_x, top_y} = {x_center - y, y_center + x}
+    {bot_x, bot_y} = {x_center - y, y_center - x}
+    img = Image.line(top_x, top_y, bot_x, bot_y, z, col, img)
+
+    let {p, y} = if p <? 0 
+    then
+      p = p + (2 * x) + 1
+      {p, y}
+    else
+      y = y - 1
+      p = p + (2 * x) - (2 * y) + 1  
+      {p, y}
+    
+    x = x + 1
+    {{img, p} {x, y}}
+  imgp@fst
+      

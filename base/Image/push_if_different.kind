@@ -1,0 +1,12 @@
+Image.push_if_different(pos: Pos32, col: Col32, img: Image): Image
+  let pix = U32Map.get<Col32>(pos, img)
+  case pix {
+    none:
+      U32Map.set<Col32>(pos, col, img)
+    some:
+      if U32.eql(pix.value, col) then
+      img
+      else
+      U32Map.set<Col32>(pos, col, img)
+  }
+ 

@@ -1,4 +1,6 @@
 type App.Drawing.Tool {
   pencil
   square
+  circle
+  fill
 }

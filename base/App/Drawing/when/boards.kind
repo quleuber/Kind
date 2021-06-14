@@ -18,6 +18,11 @@ case event{
         App.set_local!(App.Drawing.Action.local.ctrl_z(local))
       'Y':
         App.set_local!(App.Drawing.Action.local.ctrl_y(local))
+      'D':
+        style = local@style
+        style = style@tool <- App.Drawing.Tool.fill
+        new_local = local@style <- style
+        App.set_local!(new_local)
       '0':
         style = local@style
         style = style@size <- style@size + 1
@@ -45,7 +50,7 @@ case event{
     App.set_local!(new_local)
 
   frame:
-    log(Nat.show(List.length!(local@whiteboard@past)))
+    //log(Nat.show(List.length!(local@whiteboard@past)))
     let new_local = local@env_info <- event.info
     let {x, y}    = local@env_info@mouse_pos
     let style     = local@style
@@ -55,6 +60,8 @@ case event{
         case tool {
           pencil: App.Drawing.Action.tool.pencil(new_local, U32.to_i32(x), U32.to_i32(y))
           square: App.Drawing.Action.tool.square(new_local)
+          circle: App.Drawing.Action.tool.circle(new_local, U32.to_i32(x), U32.to_i32(y))
+          fill  : App.Drawing.Action.tool.fill(new_local, U32.to_i32(x), U32.to_i32(y))
         }
       else
         new_local 
