@@ -1,6 +1,17 @@
 Test: _
   let a = JSON.parser(Parser.State.new(none, "", 0, 0, "{
     \"value\": true,
-    \"another value\": {\"rapaz\": [ 0.0, 1]}
+    \"another value\": {\"rapaz\": [ 132, 1.0 ]}
   }"))
-  a
+  
+  IO {
+    get code   = IO.request("https://pokeapi.co/api/v2/pokemon/ditto")
+    let a      = JSON.parse(code)
+    let result = case a {
+      left: a.value
+      right: JSON.show(a.value)
+    }
+    IO.put_string(result)
+  }
+
+  

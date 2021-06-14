@@ -1,0 +1,6 @@
+JSON.parse(str: String): Either<String, JSON>
+  let parse = JSON.parser(Parser.State.new(none, "", 0, 0, str))
+  case parse {
+    error: Either.left!!(parse.err@msg)
+    value: Either.right!!(parse.val)
+  }

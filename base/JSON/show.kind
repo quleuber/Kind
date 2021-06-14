@@ -7,7 +7,16 @@ JSON.show.go(json: JSON, nivel: Nat): String
     bool   : Bool.show(json.x)
     number : F64.show(json.x)
     string : String.show(json.x)
-    array  : "[\n" | List.fold!(json.x)!("", (x, y) String.concat(JSON.show.go(x, nivel + 1) | ", \n", y)) | "]"
-    object : "{\n" | List.fold!(json.x)!("", (x, y) String.concat(String.repeat(" ", nivel * 2) | x@fst | ": " | JSON.show.go(x@snd, nivel + 1) | ", \n", y)) | String.repeat(" ", (nivel - 1) * 2) | "}"
+    
+    array  : String.repeat(" ", (nivel - 1) * 2) | "[\n" | 
+                List.fold!(json.x)!("", (x, y) 
+                  String.concat(JSON.show.go(x, nivel + 1) | ", \n", y)) | 
+             String.repeat(" ", (nivel - 1) * 2) | "]"
+
+    object : String.repeat(" ", (nivel - 1) * 2) | "{\n" | 
+                List.fold!(json.x)!("", (x, y) 
+                  String.concat(
+                    String.repeat(" ", nivel * 2) | x@fst | ": " | JSON.show.go(x@snd, nivel + 1) | ", \n", y)) | 
+              String.repeat(" ", (nivel - 1) * 2) | "}"
   }
   result

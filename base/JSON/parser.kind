@@ -41,9 +41,14 @@ JSON.parser.number: Parser(JSON)
     get sign = Parser.maybe<Char>(Kind.Parser.float.sign)
     let sign = sign <> '+'
     get digits = Parser.many1<Char>(Kind.Parser.float.str_digit)
-    Parser.text(".")
-    get frac = Parser.many1<Char>(Kind.Parser.float.str_digit)
-    Parser.text("#64")
+    get frac = Parser.maybe!(
+      Parser { 
+        Parser.text(".")
+        get frac = Parser.many1<Char>(Kind.Parser.float.str_digit)
+        return frac
+      }
+    )
+    let frac = frac <> []
     let float_str = String.cons(sign, String.from_list(digits))
                                   | "."
                                   | String.from_list(frac)
