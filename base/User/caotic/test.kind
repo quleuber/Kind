@@ -1,0 +1,4 @@
+User.Caotic.Test: _
+  let test = {2, 4}
+  {x, y} = test
+  y

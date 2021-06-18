@@ -1,0 +1,48 @@
+App.KL.Game.Board: Type
+  Hexagonal.Axial.BBL<App.KL.Game.Tile>
+
+// get tile from board
+App.KL.Game.Board.get(
+  coord: Hexagonal.Axial,
+  board: App.KL.Game.Board
+): Maybe<App.KL.Game.Tile>
+  Hexagonal.Axial.BBL.get!(coord, board)
+
+// set tile in some coord on board
+App.KL.Game.Board.set(
+  coord: Hexagonal.Axial,
+  tile: App.KL.Game.Tile,
+  board:App.KL.Game.Board
+): App.KL.Game.Board
+  Hexagonal.Axial.BBL.insert!(coord, tile, board)
+
+
+// push entity to board
+App.KL.Game.Board.push(
+  coord : Hexagonal.Axial,
+  entity: App.KL.Game.Entity
+  board : App.KL.Game.Board
+): App.KL.Game.Board
+
+  tile = App.KL.Game.Board.get(coord, board)
+  case tile { 
+    none: 
+      case entity {
+        terrain:
+          new_tile = App.KL.Game.Tile.new(entity.value, none)
+          App.KL.Game.Board.set(coord, new_tile, board)
+      } default board
+    some:
+      open tile.value as tile
+      case entity {
+        terrain:
+          background_tile = tile.value@background <- entity.value
+          App.KL.Game.Board.set(coord, background_tile, board)
+        creature:
+          creature_tile = tile.value@creature <- some(entity.value)
+          App.KL.Game.Board.set(coord, creature_tile, board)
+        animation:
+          animation_tile = tile.value@animation <- some(entity.value)
+          App.KL.Game.Board.set(coord, animation_tile, board)
+      }
+    }

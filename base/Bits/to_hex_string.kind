@@ -1,4 +1,5 @@
-Bits.to_hex_string (x : Bits): String
+// TODO: deprecate (use Bits.hex instead)
+Bits.to_hex_string(x: Bits): String
   let hex_to_string = ((x)
     switch Nat.eql(Bits.to_nat(x)) {
       0 : "0"
