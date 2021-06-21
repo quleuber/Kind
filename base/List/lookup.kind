@@ -1,0 +1,9 @@
+List.lookup<A: Type, B: Type>(eql: A -> A -> Bool, x: A, xs: List<Pair<A,B>>): Maybe<B>
+  case xs {
+    nil: none
+    cons:
+      if (eql(x, xs.head@fst)) then
+        some(xs.head@snd)
+      else
+        List.lookup!!(eql, x, xs.tail)
+  }
