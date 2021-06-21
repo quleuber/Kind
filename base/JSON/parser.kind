@@ -1,6 +1,6 @@
 JSON.parser: Parser<JSON>
   Parser {
-    get term = Parser.first_of!([
+    get term = Parser.choice!([
       JSON.parser.array
       JSON.parser.object
     ])
@@ -24,7 +24,7 @@ JSON.parser.array: Parser<JSON>
 
 JSON.parser.value: Parser<JSON>
   Parser {
-    get result = Parser.first_of!([
+    get result = Parser.choice!([
       JSON.parser.number,
       JSON.parser.string,
       JSON.parser.bool,
@@ -58,7 +58,7 @@ JSON.parser.number: Parser(JSON)
 
 JSON.parser.bool: Parser<JSON>
   Parser {
-    get bool = Parser.first_of<Bool>([
+    get bool = Parser.choice<Bool>([
       Parser {
         Parser.text("true")
         return Bool.true
@@ -74,7 +74,7 @@ JSON.parser.bool: Parser<JSON>
 
 JSON.parser.null: Parser<JSON>
   Parser {
-    Parser.first_of!([
+    Parser.choice!([
       Parser.text("null"),
       Parser.text("undefined")
     ])
