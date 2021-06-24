@@ -114,6 +114,7 @@ test1<
     C: Type
     P: Type
 >(
+
     p1: A -> P             
     p2: Not(J) -> C        
     p3: Or<Not(P), Not(C)>
@@ -128,3 +129,21 @@ test1<
     let p9 = sh!!!(p1, p8)    :: A -> J
 
     p9
+
+
+Pred<U: Type>: Type
+    U -> Type
+
+test2<
+    U: Type
+    P: Pred<U>
+    Q: Pred<U>
+    // a: U
+>(
+    p1: (x: U) P(x) -> Q(x)
+    p2: [y: U] P(y)
+
+): [z: U] Q(z)
+
+    {y, Py} = p2
+    y ~ p1(y)(Py) :: Q(y)
