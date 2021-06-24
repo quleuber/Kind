@@ -1,0 +1,130 @@
+DType: Type
+    Sigma<Type, Decidable>
+    // [T: Type] Decidable(T)
+
+swap_or<A: Type, B: Type>(x: Or<A, B>): Or<B, A>
+    case x {
+        left: right(x.value)
+        right: left(x.value)
+    }
+
+// ===== //
+
+// idk<A: Type>: Or(A, Not(A))
+//     idk<A>
+
+// nn<A: Type>(P: Not(Not(A))): A
+//     nn<A>(P)
+
+exm<A: Type>: Decidable<A>
+    exm<A>
+
+// ===== //
+
+// hypothetical syllogism
+
+sh<A: Type, B: Type, C: Type>
+    (f1: A -> B, f2: B -> C): A -> C
+    ((x) f2(f1(x)))
+
+
+eq9_safe<
+    A: Type
+    B: Type
+    dA: Decidable<A>
+>(p: A -> B): Or<Not(A), B>
+    case dA {
+        yep: let a = dA.proof; right(p(a))
+        nop: let na = dA.proof; left(na)
+    }
+
+eq9<
+    A: Type
+    B: Type
+>(p: A -> B): Or<Not(A), B>
+    eq9_safe!!!(p)
+
+
+eq9_simp_safe<
+    A: Type
+    B: Type
+    dA: Decidable<A>
+>(p: Not(A) -> B): Or<A, B>
+    case dA {
+        yep: let a = dA.proof; left(a)
+        nop: let na = dA.proof; right(p(na))
+    }
+
+eq9_simp<
+    A: Type
+    B: Type
+>(p: Not(A) -> B): Or<A, B>
+    let dA = exm<A> // magic
+    eq9_simp_safe!!<dA>(p)
+
+
+eq9_l<
+    A: Type
+    B: Type
+>(p: Or<A, B>): Not(A) -> B
+    (na) 
+        case p {
+            left: let nop = na(p.value); Empty.absurd!(nop)
+            right: p.value
+        }
+
+eq9_l_simp<
+    A: Type
+    B: Type
+>(p: Or<Not(A), B>): A -> B
+    (a) 
+        case p {
+            left:
+                let na = p.value
+                let nop = na(a)
+                Empty.absurd!(nop)
+            right: p.value
+        }
+
+eq9_r<
+    A: Type
+    B: Type
+>(p: Or<A, B>): Not(B) -> A
+    eq9_l!!(swap_or!!(p))
+
+eq9_r_simp<
+    A: Type
+    B: Type
+>(p: Or<A, Not(B)>): B -> A
+    eq9_l_simp!!(swap_or!!(p))
+
+
+eq17<
+    A: Type
+    B: Type
+>(p: A -> B): Not(B) -> Not(A)
+    (nb) (a)
+        let b = p(a)
+        nb(b)
+
+
+test1<
+    A: Type
+    J: Type
+    C: Type
+    P: Type
+>(
+    p1: A -> P             
+    p2: Not(J) -> C        
+    p3: Or<Not(P), Not(C)>
+
+) : A -> J
+
+    let p4 = eq9_l_simp!!(p3) :: P -> Not(C)
+    let p5 = sh!!!(p1, p4)    :: A -> Not(C)
+    let p6 = eq9_simp!!(p2)   :: Or< J, C >
+    let p7 = eq9_r!!(p6)      :: Not(C) -> J
+    let p8 = sh!!!(p4, p7)    :: P -> J
+    let p9 = sh!!!(p1, p8)    :: A -> J
+
+    p9
