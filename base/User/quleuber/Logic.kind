@@ -8,6 +8,12 @@ swap_or<A: Type, B: Type>(x: Or<A, B>): Or<B, A>
         right: left(x.value)
     }
 
+Xor<
+    A: Type
+    B: Type
+>: Type
+    Or< And<A, Not(B)>, And<B, Not(A)> >
+
 // ===== //
 
 // idk<A: Type>: Or(A, Not(A))
