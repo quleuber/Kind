@@ -8,7 +8,7 @@ type App.KL.Game.Cast {
 
 type App.KL.Game.Cast.Preview {
   new(
-    areas: App.KL.Game.Indicators
+    skill: Maybe<App.KL.Game.Skill>
     picks: App.KL.Game.Picks
   )
 }
@@ -18,6 +18,7 @@ type App.KL.Game.Cast.Result {
   success(
     game: App.KL.Game
     hits: App.KL.Game.Indicators
+    ap_used: I32
   )
 }
 
@@ -52,14 +53,7 @@ App.KL.Game.Cast.picks_of(
       result
   
   result@snd
-  
-// Gets the skill associated with a cast
-App.KL.Game.Cast.get_skill(
-  cast: App.KL.Game.Cast
-  game: App.KL.Game
-): Maybe<App.KL.Game.Skill>
-  App.KL.Game.Skill.get(cast@player, cast@letter, game)
-  
+
 // Gets the skill associated with a cast
 App.KL.Game.Cast.get_skill(
   cast: App.KL.Game.Cast
@@ -74,7 +68,7 @@ App.KL.Game.Cast.get_skill(
     get skill = hero@skills{Char.to_string(cast.letter)}
     return skill
   }
-
+  
 // Gets the coord associated with a cast
 App.KL.Game.Cast.get_coord(
   cast: App.KL.Game.Cast
@@ -98,10 +92,18 @@ App.KL.Game.Cast.get_hero(
   cast: App.KL.Game.Cast
   game: App.KL.Game
 ): Maybe<App.KL.Game.Hero>
+  open game
+  open cast
   Maybe {
-    get creature = App.KL.Game.Cast.get_creature(cast, game)
-    return creature@hero
+    get player = game.players{cast.player}
+    get hero_id = player@hero_id
+    get hero = App.KL.Game.Hero.get_by_id(hero_id)
+    return hero
   }
+  //Maybe {
+    //get creature = App.KL.Game.Cast.get_creature(cast, game)
+    //return creature@hero
+  //}
 
 // Sorts a game's casts by delay, in ascending order, removing duplicates
 App.KL.Game.Cast.sort(game: App.KL.Game): List<App.KL.Game.Cast>
@@ -136,26 +138,28 @@ App.KL.Game.Cast.apply(
     let result = skill@effect(coord, cast@target, game@board)
     return case result {
       err: App.KL.Game.Cast.Result.failure
-      new: App.KL.Game.Cast.Result.success(game@board <- result.board, result.indicators)
+      new: App.KL.Game.Cast.Result.success(game@board <- result.board, result.indicators, result.ap_used)
     }
   } <> App.KL.Game.Cast.Result.failure
 
-// Estimates a player's creature based on the current casts
-App.KL.Game.Cast.estimate_position(
-  player: String
-  delay: U64
-  game: App.KL.Game
-): Maybe<Hexagonal.Axial>
-  let casts = App.KL.Game.Cast.sort(game)
-  let casts = List.filter!((x) String.eql(x@player, player), casts)
-  let game  = App.KL.Game.Cast.estimate_position.go(casts, delay, game)
-  App.KL.Game.Board.find_player_coord(player, game@board)
 
-App.KL.Game.Cast.estimate_position.go(
+// TODO: modularize
+// Runs all casts up to a given delay with a filter
+App.KL.Game.Cast.simulate(
+  max_delay: U64
+  filter: App.KL.Game.Cast -> Bool
+  game: App.KL.Game
+): App.KL.Game
+  let casts = App.KL.Game.Cast.sort(game)
+  let casts = List.filter!(filter, casts)
+  App.KL.Game.Cast.simulate.go(casts, max_delay, game)
+
+App.KL.Game.Cast.simulate.go(
   casts: List<App.KL.Game.Cast>
   max_delay: U64
   game: App.KL.Game
 ): App.KL.Game
+  open game
   Maybe {
     get cast = List.head!(casts)
     get skill = App.KL.Game.Cast.get_skill(cast, game)
@@ -166,7 +170,7 @@ App.KL.Game.Cast.estimate_position.go(
         failure: game
         success: result.game
       }
-      return App.KL.Game.Cast.estimate_position.go(List.tail!(casts), max_delay, game)
+      return App.KL.Game.Cast.simulate.go(List.tail!(casts), max_delay, game)
     } else Maybe {
       return game
     }

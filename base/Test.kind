@@ -1,4 +1,6 @@
-Test:_
-  let coord = Hexagonal.Axial.new(+1, -1)
-  List.show!(Hexagonal.Axial.show, Hexagonal.Axial.clock_rotation(coord))
-  
+Test: IO<Unit>
+  IO {
+    let x = some(7) abort IO.print("ata")
+    let y = some(7) abort IO.print("ola")
+    return unit
+  }

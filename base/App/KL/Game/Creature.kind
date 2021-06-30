@@ -10,6 +10,18 @@ type App.KL.Game.Creature {
 }
 
 type App.KL.Game.Creature.Status {
+  burn(
+    duration: I32
+    amount: I32
+  )
+  haste(
+    duration : I32
+    amount : I32
+  )
+  poison(
+    duration: I32
+    amount: I32
+  )
   stun(
     duration: I32
   )
@@ -17,6 +29,10 @@ type App.KL.Game.Creature.Status {
     id: String
     duration: I32
     amount: I32
+  )
+  weaken(
+    duration : I32
+    amount : I32
   )
 }
 
@@ -43,23 +59,4 @@ App.KL.Game.Creature.Status.hit_shields(
       let {status_tail, total_blocked} = App.KL.Game.Creature.Status.hit_shields(damage, status.tail)
       let status = status.head & status_tail
       {status, total_blocked}
-  }
-
-// Decreases the duration of all active status and remove expired ones
-App.KL.Game.Creature.Status.tick(
-  status: List<App.KL.Game.Creature.Status>
-): List<App.KL.Game.Creature.Status>
-  case status {
-    nil:
-      []
-    cons: 
-      let head = case status.head {
-        stun: App.KL.Game.Creature.Status.stun(I32.sub(status.head.duration, 1))
-        shield: App.KL.Game.Creature.Status.shield(status.head.id, I32.sub(status.head.duration, 1), status.head.amount)
-      }
-      let tail = App.KL.Game.Creature.Status.tick(status.tail)
-      case head {
-        stun: if I32.gtn(head.duration,0) then head & tail else tail
-        shield: if I32.gtn(head.duration,0) then head & tail else tail
-      }
   }

@@ -1,0 +1,60 @@
+App.KL.Game.Hero.Zoio.hero: App.KL.Game.Hero
+  let name = "Zoio"
+
+  let draw = (pose)
+    {none, App.KL.Game.Hero.Zoio.Assets.vbox_idle}
+
+  let picture = (bool, time)
+    App.KL.Game.Hero.Zoio.Assets.base64_idle
+
+  let max_hp = 18 :: I32
+
+  let max_ap = 3 :: I32
+
+  let skills = {
+    "X": App.KL.Game.Skill.new("Walk", 500, 12, 1, App.KL.Game.Effect.common.walk(1, 1))
+    "Q": App.KL.Game.Skill.new("Tentackle", 300, 48, 2, App.KL.Game.Hero.Zoio.hero.Skills.tentackle(2, 8, 2))
+    "W": App.KL.Game.Skill.new("Eye Beam", 650, 48, 1, App.KL.Game.Hero.Zoio.hero.Skills.eye_beam(16, 12, 1))
+    "E": App.KL.Game.Skill.new("Blinkaboom", 800, 48, 32, App.KL.Game.Hero.Zoio.hero.Skills.blinkaboom(16, 16, 3))
+  }
+
+  let on_stepped = none
+
+  App.KL.Game.Hero.new(name, draw, picture, max_hp, max_ap, skills, on_stepped)
+
+App.KL.Game.Hero.Zoio.hero.Skills.eye_beam(size: I32, dmg: I32, ap_cost: I32): App.KL.Game.Effect<Unit>
+  App.KL.Game.Effect { 
+    get center = App.KL.Game.Effect.coord.get_center
+    get target = App.KL.Game.Effect.coord.get_target
+    let straight_line = App.KL.Game.Effect.area.straight_line(size, center, target)
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.red, straight_line)
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.blue, [center])
+    App.KL.Game.Effect.common.dmg.straight_line(size, dmg, ap_cost)
+  }
+
+App.KL.Game.Hero.Zoio.hero.Skills.tentackle(range: I32, dmg: I32, ap_cost: I32): App.KL.Game.Effect<Unit>
+  App.KL.Game.Effect { 
+    get target  = App.KL.Game.Effect.coord.get_target
+    get center  = App.KL.Game.Effect.coord.get_center
+    App.KL.Game.Effect.limit_range(range)
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.blue, [center])
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.red, [target])
+    App.KL.Game.Effect.common.dmg.single(range, dmg, ap_cost)
+  }
+
+App.KL.Game.Hero.Zoio.hero.Skills.blinkaboom(size: I32, dmg: I32, ap_cost: I32): App.KL.Game.Effect<Unit>
+  App.KL.Game.Effect { 
+    get target = App.KL.Game.Effect.coord.get_target
+    get center = App.KL.Game.Effect.coord.get_center
+    let ring = App.KL.Game.Effect.area.ring(target)
+    let area = []
+    let area = for direction_coord in ring:
+      App.KL.Game.Effect.area.straight_line(size, target, direction_coord) ++ area
+    App.KL.Game.Effect.ap.use(ap_cost)
+    App.KL.Game.Effect.movement.move_to(center, target)
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.blue, [center])
+    App.KL.Game.Effect.indicators.list(App.KL.Game.Indicator.red, target & area)
+    App.KL.Game.Effect.area!(App.KL.Game.Effect.At.enemy!(App.KL.Game.Effect.hp.damage_at(dmg)), area)
+    App.KL.Game.Effect.hp.damage_at(256, target)
+    return unit
+  }
