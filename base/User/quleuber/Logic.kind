@@ -8,11 +8,12 @@ swap_or<A: Type, B: Type>(x: Or<A, B>): Or<B, A>
         right: left(x.value)
     }
 
-Xor<
-    A: Type
-    B: Type
->: Type
+Xor<A: Type, B: Type>: Type
     Or< And<A, Not(B)>, And<B, Not(A)> >
+
+// ∃x ( P(x) ⋀ ∀y ( y != x -> ~P(y) )
+ExistsUnique<U: Type>(P: Pred<U>): Type
+    ([x: U] And< P(x), (y: U) (x != y) -> Not<P(y)> >)
 
 // ===== //
 
