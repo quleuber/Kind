@@ -1,11 +1,14 @@
 // - Implementation
-// - Namespace access syntax
 // - Sugar for module signature and module implementation
 //   - `module type` etc in OCaml
+// - Namespace access syntax
+//   - test with `::`
 
-// Namespace
+// TODO: fix map equality depending on order of insertion
 
-// TODO: restrict to valid identfiers strings (a-z, A-Z, 0-9)
+// Namespaces
+
+// TODO: restrict to valid identifier strings (a-z, A-Z, 0-9, _)
 type Id {
   new(id: String)
 }
@@ -24,42 +27,40 @@ Namespace.new<T: Type>: Namespace<T>
 Namespace.insert<T: Type>(id: Id, val: T, ns: Namespace<T>): Namespace<T>
   BBT.insert<Id, T>(Id.cmp)(id, val, ns)
 
-// Modules
+// Generic Signature
+// Id => Type
 
-ModuleSig: Type
+Sig: Type
   Namespace<Type>
 
-ModuleSig.empty: ModuleSig
+Sig.empty: Sig
   Namespace.new<Type>
-  
-ModuleSig.add(id: Id, t: Type, sig: ModuleSig): ModuleSig
+
+Sig.add(id: Id, t: Type, sig: Sig): Sig
   Namespace.insert<Type>(id, t, sig)
 
-type Vector (A: Type) ~ (len: Nat) {
-  nil                                          ~ (len = Nat.zero)
-  cons(len: Nat, head: A, tail: Vector(A,len)) ~ (len = Nat.succ(len))
-}
+// Modules
 
-type KModule ~ (sig: ModuleSig) {
+type KModule ~ (sig: Sig) {
   empty
-    ~ (sig = ModuleSig.empty)
-  add<sig: ModuleSig>(
-    T: Type,
+    ~ (sig = Sig.empty)
+  add<sig: Sig>(
     id: Id,
+    T: Type,
     val: T,
     mod: KModule<sig>,
   )
-    ~ (sig = ModuleSig.add(id, T, sig))
+    ~ (sig = Sig.add(id, T, sig))
 }
 
 // Example
 
-ExampleModuleSig: ModuleSig
+ExampleModuleSig: Sig
   def id = Id.new
-  let sig = ModuleSig.empty
+  let sig = Sig.empty
   //
-  let sig = ModuleSig.add( id("x")   Int    )(sig)
-  let sig = ModuleSig.add( id("txt") String )(sig)
+  let sig = Sig.add( id("x")   Nat    )(sig)
+  let sig = Sig.add( id("txt") String )(sig)
   //
   sig
 
@@ -67,8 +68,8 @@ ExampleModule: KModule<ExampleModuleSig>
   def id = Id.new
   let mod = KModule.empty
   //
-  let mod = KModule.add!( Int     id("x")    42     )(mod)
-  let mod = KModule.add!( String  id("txt")  "fuba" )(mod)
+  let mod = KModule.add!( id("x")    Nat     42     )(mod)
+  let mod = KModule.add!( id("txt")  String  "fuba" )(mod)
 
   // let mod = KModule.add!( Bits    id("ops")  Bits.e )(mod)  // FAILS o/
 

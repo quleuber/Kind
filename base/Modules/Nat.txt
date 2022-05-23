@@ -1,0 +1,23 @@
+// Add.kind
+// defines the "typeclass"
+
+Add: ModuleType =
+  module type <T: Type> {
+    add: T -> T -> T
+    t0: add(a, b) == add(b, a)
+  }
+
+// Nat.kind
+// defines Nat and a instance of the "typeclass" Add for Nat
+
+type Nat {
+  zero
+  succ(pred: Nat)
+}
+
+Nat.Add: Add<Nat> =
+  module {
+    add(a: Nat, b: Nat): Nat =
+      a + b
+  }
+

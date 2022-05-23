@@ -1,0 +1,9 @@
+let sig = module type {
+  x: Nat
+  txt: String
+}
+
+let mod = module : Sig {
+  x: Nat = 42
+  txt: String = "fuba"
+}
