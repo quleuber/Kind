@@ -5,10 +5,14 @@
 //   - test with `::`
 
 // TODO: fix map equality depending on order of insertion
-
-// Namespaces
+// https://github.com/xavierleroy/canonical-binary-tries ?
 
 // TODO: restrict to valid identifier strings (a-z, A-Z, 0-9, _)
+
+
+// Namespaces
+// ----------
+
 type Id {
   new(id: String)
 }
@@ -28,6 +32,7 @@ Namespace.insert<T: Type>(id: Id, val: T, ns: Namespace<T>): Namespace<T>
   BBT.insert<Id, T>(Id.cmp)(id, val, ns)
 
 // Generic Signature
+// -----------------
 // Id => Type
 
 Sig: Type
@@ -40,6 +45,7 @@ Sig.add(id: Id, t: Type, sig: Sig): Sig
   Namespace.insert<Type>(id, t, sig)
 
 // Modules
+// -------
 
 type KModule ~ (sig: Sig) {
   empty
@@ -54,6 +60,7 @@ type KModule ~ (sig: Sig) {
 }
 
 // Example
+// -------
 
 ExampleModuleSig: Sig
   def id = Id.new
@@ -71,6 +78,6 @@ ExampleModule: KModule<ExampleModuleSig>
   let mod = KModule.add!( id("x")    Nat     42     )(mod)
   let mod = KModule.add!( id("txt")  String  "fuba" )(mod)
 
-  // let mod = KModule.add!( Bits    id("ops")  Bits.e )(mod)  // FAILS o/
+  // let mod = KModule.add!( Bits    id("ops")  Bits.e )(mod)  // FAILS  \o/
 
   mod

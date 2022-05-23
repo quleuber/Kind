@@ -1,9 +1,11 @@
-let sig = module type {
-  x: Nat
-  txt: String
-}
+MyMod: Sig
+  sig {
+    x: Nat
+    txt: String
+  }
 
-let mod = module : Sig {
-  x: Nat = 42
-  txt: String = "fuba"
-}
+let mod =
+  module : MyMod {
+    x: Nat = 42
+    txt: String = "fuba"
+  }
