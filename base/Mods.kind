@@ -1,0 +1,61 @@
+// - Implementation
+// - Sugar for module signature and module implementation
+//   - `module type` etc in OCaml
+// - Mods.Namespace access syntax
+//   - test with `::`
+
+// TODO:
+// - restrict to valid identifier strings (a-z, A-Z, 0-9, _)
+// - fix map equality depending on order of insertion
+//   - https://github.com/xavierleroy/canonical-binary-tries ?
+
+// Modules
+// -------
+
+type Mods.Mod ~ (sig: Mods.Sig) {
+  empty
+    ~ (sig = Mods.Sig.empty)
+  cons<sig: Mods.Sig>(
+    id: Mods.Id,
+    T: Type,
+    val: T,
+    mod: Mods.Mod<sig>,
+  )
+    ~ (sig = Mods.Sig.add(id, T, sig))
+}
+
+Mods.Mod.add
+    <sig: Mods.Sig>
+    (
+      id: Mods.Id,
+      T: Type,
+      val: T,
+      mod: Mods.Mod<sig>,
+    ): Pair<T, Mods.Mod<Mods.Sig.add(id, T, sig)>>
+  let mod = Mods.Mod.cons<sig>(id, T, val, mod)
+  Pair.new!!(val, mod)
+
+// Example
+// -------
+
+Mods.ExampleModuleSig: Mods.Sig
+  def id = Mods.Id.new
+  let sig = Mods.Sig.empty
+  //
+  let sig = Mods.Sig.add( id("x")   Nat    )(sig)
+  let sig = Mods.Sig.add( id("txt") String )(sig)
+  //
+  sig
+
+Mods.ExampleModule: Mods.Mod<Mods.ExampleModuleSig>
+  def id = Mods.Id.new
+  def m_add = Mods.Mod.add
+
+  let mod = Mods.Mod.empty
+  //
+  let {x,   mod} = m_add!( id("x")    Nat     42     )(mod)
+  let {txt, mod} = m_add!( id("txt")  String  "fuba" )(mod)
+
+  // let mod = KModule.add!( Bits    id("ops")  Bits.e )(mod)  // FAILS  \o/
+
+  mod

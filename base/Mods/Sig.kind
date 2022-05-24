@@ -1,0 +1,16 @@
+// Generic Signature
+// -----------------
+// Id => Type
+
+Mods.Sig: Type
+  Mods.Namespace<Type>
+
+Mods.Sig.empty: Mods.Sig
+  Mods.Namespace.new<Type>
+
+Mods.Sig.add(id: Mods.Id, t: Type, sig: Mods.Sig): Mods.Sig
+  Mods.Namespace.insert<Type>(id, t, sig)
+
+Mods.Sig.add_ret(id: Mods.Id, T: Type, sig: Mods.Sig): Pair<Type, Mods.Sig>
+  let sig = Mods.Namespace.insert<Type>(id, T, sig)
+  Pair.new!!(T, sig)

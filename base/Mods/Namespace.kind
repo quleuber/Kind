@@ -1,0 +1,16 @@
+// Namespaces
+// ----------
+// <T> Id => T
+
+Mods.Namespace<T: Type>: Type
+  BBT<Mods.Id, T>
+
+Mods.Namespace.new<T: Type>: Mods.Namespace<T>
+  BBT.tip!!
+
+Mods.Namespace.insert<T: Type>(
+  id: Mods.Id,
+  val: T,
+  ns: Mods.Namespace<T>,
+): Mods.Namespace<T>
+  BBT.insert<Mods.Id, T>(Mods.Id.cmp)(id, val, ns)

@@ -1,0 +1,58 @@
+
+Mods.ExtMap: Mods.Sig
+  def id = Mods.Id.new
+  def s_add = Mods.Sig.add_ret
+  let sig = Mods.Sig.empty
+
+  //
+
+  def Map_t =
+    (K: Type, V: Type) -> Type
+
+  def Map_get_t = 
+    <Map: Map_t> ->
+    <K: Type, V: Type> -> K -> Map<K, V> -> V
+
+  let {Map_get_out, sig}      = s_add( id("Map")       Map_t        )(sig)
+  // let {Map_get_t_out, sig} = s_add( id("Map_get")   Map_get_t    )(sig)
+
+
+  // TODO:
+
+  // let {sig} =
+  //   s_add<1, ["Map"]>(
+  //     id("Map_get")
+  //     (Map) <K: Type, V: Type> -> K -> Map<K, V> -> V
+  //   )(sig)
+
+  //
+  // sig
+  sig
+
+type The.Map<K: Type, V: Type> {
+  new(k: K, v: V)
+}
+
+The.Map_get<K: Type, V: Type>(k: K, map: The.Map<K, V>): V
+  open map
+  map.v
+
+Mods.InsMap: Mods.Mod<Mods.ExtMap>
+    def id = Mods.Id.new
+    def m_add = Mods.Mod.add
+
+    let mod = Mods.Mod.empty
+
+    def Map_t     = (K: Type, V: Type) -> Type
+    def Map_get_t = 
+      <Map: Map_t> ->
+      <K: Type, V: Type> -> K -> Map<K, V> -> V
+
+    // let Map_get_ = ((map: Map_t) The.Map_get) :: Map_get_t
+
+    //
+    let {Map,     mod} = m_add!( id("Map")  Map_t       The.Map     )(mod)
+    // let {Map_get, mod} = m_add!( id("txt")  Map_get_t   Map_get_    )(mod)
+    //
+
+    mod

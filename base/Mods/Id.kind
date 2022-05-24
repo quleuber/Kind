@@ -1,0 +1,8 @@
+type Mods.Id {
+  new(id: String)
+}
+
+Mods.Id.cmp(a: Mods.Id, b: Mods.Id): Cmp
+  open a
+  open b
+  String.cmp(a.id, b.id)
